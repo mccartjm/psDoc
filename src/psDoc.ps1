@@ -1,7 +1,7 @@
 param(
     [parameter(Mandatory=$true, Position=0)] [string] $moduleName,
-    [parameter(Mandatory=$false, Position=1)] [string] $template = "./out-html-template.ps1",
-    [parameter(Mandatory=$false, Position=2)] [string] $outputDir = './help',
+    [parameter(Mandatory=$false, Position=1)] [string] $template = "./psDoc/src/out-html-template.ps1",
+    [parameter(Mandatory=$false, Position=2)] [string] $outputDir = './psDoc/src/doc',
     [parameter(Mandatory=$false, Position=3)] [string] $fileName = 'index.html'
 )
 
@@ -50,8 +50,8 @@ foreach ($h in $commandsHelp){
 }
 
 # Create the output directory if it does not exist
-if (-Not (Test-Path $outputDir)) {
-    New-Item -Path $outputDir -ItemType Directory | Out-Null
+if (-Not (Test-Path $outputDir\$moduleName)) {
+    New-Item -Path $outputDir\$moduleName -ItemType Directory | Out-Null
 }
 
 $totalCommands = $commandsHelp.Count
@@ -60,4 +60,4 @@ if (!$totalCommands) {
 }
 
 $template = Get-Content $template -raw -force
-Invoke-Expression $template > "$outputDir\$fileName"
+Invoke-Expression $template > "$outputDir\$moduleName\$fileName"
